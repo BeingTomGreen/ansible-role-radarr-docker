@@ -12,12 +12,12 @@ radarr_docker_environment:
 radarr_docker_volumes:
   - "{{ radarr_docker_base_dir }}/config:/config"
   # The default way
-  - '/path/to/tv-series:/tv'
+  - '/path/to/movies:/movies'
   - '/path/to/download-client-downloads:/downloads'
   # Better, for atomic moves/hard links
   # See https://wiki.servarr.com/docker-guide#consistent-and-well-planned-paths
   # See https://trash-guides.info/File-and-Folder-Structure/Hardlinks-and-Instant-Moves/
-  # - /path/to/data:/data
+  # - '/path/to/data:/data'
 
 # The ports to pass through, can be an empty list if you don't need to expose ports
 radarr_docker_ports:
@@ -39,7 +39,7 @@ radarr_docker_container_name: 'radarr'
 radarr_docker_networks: []
 # Example:
 # radarr_docker_networks:
-#  - "mediarr"
+#  - 'mediarr'
 
 # Optional depends on
 radarr_docker_depends_on: []
