@@ -1,0 +1,55 @@
+---
+
+# Environment variables for Radarr
+# See https://docs.linuxserver.io/images/docker-radarr/
+radarr_docker_environment:
+  PUID: '1000'
+  PGID: '1000'
+  TZ: 'Etc/UTC'
+
+# Volume mappings
+# If you use a named volume, it will be attached as an external volume and must already exist
+radarr_docker_volumes:
+  - "{{ radarr_docker_base_dir }}/config:/config"
+  # The default way
+  - '/path/to/tv-series:/tv'
+  - '/path/to/download-client-downloads:/downloads'
+  # Better, for atomic moves/hard links
+  # See https://wiki.servarr.com/docker-guide#consistent-and-well-planned-paths
+  # See https://trash-guides.info/File-and-Folder-Structure/Hardlinks-and-Instant-Moves/
+  # - /path/to/data:/data
+
+# The ports to pass through, can be an empty list if you don't need to expose ports
+radarr_docker_ports:
+  - '7878:7878'
+
+# User that will run Radarr
+radarr_docker_user: "{{ ansible_user }}"
+
+# Base path for deployment
+radarr_docker_base_dir: '/srv/radarr_docker'
+
+# Docker image
+radarr_docker_image: 'lscr.io/linuxserver/radarr:latest'
+
+# Docker container name
+radarr_docker_container_name: 'radarr'
+
+# Networks to attach the container to
+radarr_docker_networks: []
+# Example:
+# radarr_docker_networks:
+#  - "mediarr"
+
+# Optional depends on
+radarr_docker_depends_on: []
+
+# Define our restart policy
+radarr_docker_restart_policy: 'unless-stopped'
+
+# Define labels for the Radarr container
+radarr_docker_labels: []
+# Example:
+# radarr_docker_labels:
+#  - traefik.enable=true
+#  - traefik.http.routers.traefik-https.entrypoints=https

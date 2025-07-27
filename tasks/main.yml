@@ -1,0 +1,22 @@
+---
+
+- name: Ensure base Radarr directory exists
+  ansible.builtin.file:
+    path: "{{ radarr_docker_base_dir }}"
+    state: 'directory'
+    owner: "{{ radarr_docker_user }}"
+    group: "{{ radarr_docker_user }}"
+    mode: '0755'
+
+- name: Ensure Radarr compose file is present
+  ansible.builtin.template:
+    src: 'compose.yml.j2'
+    dest: "{{ radarr_docker_base_dir }}/compose.yml"
+    owner: "{{ radarr_docker_user }}"
+    group: "{{ radarr_docker_user }}"
+    mode: '0644'
+
+- name: Ensure Radarr is running
+  community.docker.docker_compose_v2:
+    project_src: "{{ radarr_docker_base_dir }}"
+    state: 'present'
