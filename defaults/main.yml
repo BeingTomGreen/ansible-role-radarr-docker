@@ -1,55 +1,92 @@
 ---
 
-# Environment variables for Radarr
-# See https://docs.linuxserver.io/images/docker-radarr/
-radarr_docker_environment:
-  PUID: '1000'
-  PGID: '1000'
-  TZ: 'Etc/UTC'
+# Specifies container capabilities to add/drop
+# See: https://man7.org/linux/man-pages/man7/capabilities.7.html
+radarr_docker_cap_add: []
+radarr_docker_cap_drop: []
 
-# Volume mappings
-# If you use a named volume, it will be attached as an external volume and must already exist
-radarr_docker_volumes:
-  - "{{ radarr_docker_base_dir }}/config:/config"
-  # The default way
-  - '/path/to/movies:/movies'
-  - '/path/to/download-client-downloads:/downloads'
-  # Better, for atomic moves/hard links
-  # See https://wiki.servarr.com/docker-guide#consistent-and-well-planned-paths
-  # See https://trash-guides.info/File-and-Folder-Structure/Hardlinks-and-Instant-Moves/
-  # - '/path/to/data:/data'
-
-# The ports to pass through, can be an empty list if you don't need to expose ports
-radarr_docker_ports:
-  - '7878:7878'
-
-# User that will run Radarr
-radarr_docker_user: "{{ ansible_user }}"
-
-# Base path for deployment
-radarr_docker_base_dir: '/srv/radarr_docker'
-
-# Docker image
-radarr_docker_image: 'lscr.io/linuxserver/radarr:latest'
-
-# Docker container name
+# Set container name
 radarr_docker_container_name: 'radarr'
 
-# Networks to attach the container to
-radarr_docker_networks: []
-# Example:
-# radarr_docker_networks:
-#  - 'mediarr'
-
-# Optional depends on
+# Set services container depends on
 radarr_docker_depends_on: []
 
-# Define our restart policy
-radarr_docker_restart_policy: 'unless-stopped'
+# Set container devices
+# See: https://docs.linuxserver.io/images/docker-radarr/#hardware-acceleration
+radarr_docker_devices: []
+# Example:
+# radarr_docker_devices:
+# - '/dev/dri:/dev/dri'
+# - '/dev/kfd:/dev/kfd'
 
-# Define labels for the Radarr container
+# Set container PUID and PGID
+# See https://docs.linuxserver.io/general/understanding-puid-and-pgid/
+radarr_docker_env_puid: 1000
+radarr_docker_env_pgid: 1000
+
+# Set container timezone env
+radarr_docker_env_timezone: 'Etc/UTC'
+
+# Set additional Radarr envs
+# Additional container environment variables
+radarr_docker_extra_environment_vars: []
+# Example:
+# radarr_docker_extra_environment_vars:
+#   SOME_OTHER_VAR: 'A_VALUE'
+
+# Set container image options
+radarr_docker_image: 'lscr.io/linuxserver/radarr'
+radarr_docker_image_tag: 'latest'
+
+# Set container labels
 radarr_docker_labels: []
 # Example:
 # radarr_docker_labels:
-#  - traefik.enable=true
-#  - traefik.http.routers.traefik-https.entrypoints=https
+#  traefik.enable: 'true'
+#  traefik.http.routers.traefik-https.entrypoints: 'https'
+
+# Set container network mode
+# Can be: null (if using port mapping/networks) 'none', 'host', 'service:<service-name>' or 'container:<container-name>'
+# radarr_docker_network_mode will need to be null if you want to specify ports etc
+radarr_docker_network_mode:
+
+# Set container external networks
+radarr_docker_external_networks: []
+# Example:
+# radarr_docker_external_networks:
+#  - 'mediarr'
+
+# Set container ports
+radarr_docker_ports:
+  - '7878:7878'
+
+# Set container pull policy
+# See: https://docs.docker.com/reference/compose-file/services/#pull_policy
+# Can be: always, never, missing, build, daily, weekly, every_<duration>
+radarr_docker_pull_policy: 'missing'
+
+# Set container restart policy
+radarr_docker_restart_policy: 'unless-stopped'
+
+# Set container runtime
+radarr_docker_runtime: 'runc'
+
+# Set additional container volumes
+radarr_docker_additional_volumes: []
+# Example:
+# radarr_docker_additional_volumes:
+# - '/path/to/tv:/tv'
+# - '/path/to/movies:/movies'
+# - '/path/to/music:/music'
+# - '/path/to/usenet:/usenet'
+# - '/path/to/torrents:/torrents'
+
+# User that will own the compose files
+radarr_docker_user: "{{ ansible_user }}"
+
+# Base path for deployment
+radarr_docker_base_directory: '/srv/radarr_docker'
+
+# Control image pruning
+radarr_docker_prune_images: 'false'
+radarr_docker_prune_until: '72h'

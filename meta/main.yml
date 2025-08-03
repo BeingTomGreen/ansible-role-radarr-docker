@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: Tom Green
-  description: A simple role for running radarr via Docker compose.
+  description: A simple ansible role for running Radarr via Docker compose using the LinuxServer.io Radarr image
 
   role_name: radarr_docker
   namespace: beingtomgreen

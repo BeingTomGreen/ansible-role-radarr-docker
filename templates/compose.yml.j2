@@ -3,45 +3,74 @@
 
 services:
   radarr:
-    image: {{ radarr_docker_image }}
+    {% if radarr_docker_cap_add | length > 0 %}
+    cap_add:
+      {% for capability in radarr_docker_cap_add %}
+      - {{ capability }}
+      {% endfor %}
+    {% endif %}
+    {% if radarr_docker_cap_drop | length > 0 %}
+    cap_drop:
+      {% for capability in radarr_docker_cap_drop %}
+      - {{ capability }}
+      {% endfor %}
+    {% endif %}
     container_name: {{ radarr_docker_container_name }}
-    restart: {{ radarr_docker_restart_policy }}
-    {% if radarr_docker_ports | length > 0 %}
-    ports:
-      {% for port in radarr_docker_ports %}
-      - {{ port }}
-      {% endfor %}
-    {% endif %}
-    {% if radarr_docker_networks | length > 0 %}
-    networks:
-      {% for net in radarr_docker_networks %}
-      - {{ net }}
-      {% endfor %}
-    {% endif %}
-    volumes:
-      {% for vol in radarr_docker_volumes %}
-      - {{ vol }}
-      {% endfor %}
-    environment:
-      {% for key, value in radarr_docker_environment.items() %}
-      {{ key }}: "{{ value }}"
-      {% endfor %}
-    {% if radarr_docker_depends_on %}
+    {% if radarr_docker_depends_on | length > 0 %}
     depends_on:
       {% for dep in radarr_docker_depends_on %}
       - {{ dep }}
       {% endfor %}
     {% endif %}
-    {% if radarr_docker_labels %}
-    labels:
-      {% for label in radarr_docker_labels %}
-      - {{ label }}
+    {% if radarr_docker_devices %}
+    devices:
+      {% for device in radarr_docker_devices %}
+      - {{ device }}
       {% endfor %}
     {% endif %}
-{% if radarr_docker_networks | length > 0 %}
+    environment:
+      PUID: "{{ radarr_docker_env_puid }}"
+      PGID: "{{ radarr_docker_env_pgid }}"
+      TZ: "{{ radarr_docker_env_timezone }}"
+      {% if radarr_docker_extra_environment_vars | length > 0 %}
+      {% for env, value in radarr_docker_extra_environment_vars.items() %}
+      {{ env }}: "{{ value }}"
+      {% endfor %}
+      {% endif %}
+    image: {{ radarr_docker_image }}:{{ radarr_docker_image_tag }}
+    {% if radarr_docker_labels | length > 0 %}
+    labels:
+      {% for label, value in radarr_docker_labels.items() %}
+      {{ label }}: "{{ value }}"
+      {% endfor %}
+    {% endif %}
+    {% if radarr_docker_external_networks | length > 0 and not (radarr_docker_network_mode | default('')) %}
+    networks:
+      {% for net in radarr_docker_external_networks %}
+      - {{ net }}
+      {% endfor %}
+    {% elif radarr_docker_network_mode %}
+    network_mode: {{ radarr_docker_network_mode | default('host') }}
+    {% endif %}
+    {% if radarr_docker_ports | length > 0 and not (radarr_docker_network_mode | default('')) %}
+    ports:
+      {% for port in radarr_docker_ports %}
+      - {{ port }}
+      {% endfor %}
+    {% endif %}
+    pull_policy: {{ radarr_docker_pull_policy }}
+    restart: {{ radarr_docker_restart_policy }}
+    volumes:
+      - {{ radarr_docker_base_directory }}/config:/config
+      {% if radarr_docker_additional_volumes | length > 0 %}
+      {% for vol in radarr_docker_additional_volumes %}
+      - {{ vol }}
+      {% endfor %}
+      {% endif %}
+{% if radarr_docker_external_networks | length > 0 and not (radarr_docker_network_mode | default('')) %}
 
 networks:
-  {% for net in radarr_docker_networks %}
+  {% for net in radarr_docker_external_networks %}
   {{ net }}:
     external: true
   {% endfor %}
