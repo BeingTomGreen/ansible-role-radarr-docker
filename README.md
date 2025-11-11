@@ -106,7 +106,7 @@ Seriously, take a look at [`defaults/main.yml`](defaults/main.yml), it's obnoxio
 
     radarr_docker_base_directory: '/opt/radarr_docker'
 
-    radarr_docker_prune_images: 'true'
+    radarr_docker_prune_images: True
     radarr_docker_prune_until: '24h'
 
   roles:

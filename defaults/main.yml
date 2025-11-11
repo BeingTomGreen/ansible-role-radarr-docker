@@ -88,5 +88,5 @@ radarr_docker_user: "{{ ansible_user }}"
 radarr_docker_base_directory: '/srv/radarr_docker'
 
 # Control image pruning
-radarr_docker_prune_images: 'false'
+radarr_docker_prune_images: True # True/False, not "true/false"
 radarr_docker_prune_until: '72h'
