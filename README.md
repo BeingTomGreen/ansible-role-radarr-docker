@@ -106,7 +106,7 @@ Seriously, take a look at [`defaults/main.yml`](defaults/main.yml), it's obnoxio
 
     radarr_docker_base_directory: '/opt/radarr_docker'
 
-    radarr_docker_update_image: False
+    radarr_docker_update_image: true
 
   roles:
     - role: beingtomgreen.radarr_docker
