@@ -108,7 +108,7 @@ radarr_docker_networks: []
 # radarr_docker_networks:
 #  - 'mediarr'
 
-# The ports is used to define the port mappings between the host machine and the containers
+# Define the port mappings between the host machine and the containers
 radarr_docker_ports:
   - '7878:7878'
 
